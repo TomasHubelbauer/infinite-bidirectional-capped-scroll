@@ -1,0 +1,9 @@
+{
+	// https://code.visualstudio.com/docs/getstarted/settings#_language-specific-editor-settings
+	"html.format.endWithNewline": true,
+	"html.format.extraLiners": "",
+	"html.format.indentInnerHtml": true,
+	"html.format.wrapLineLength": 0,
+	"editor.insertSpaces": true,
+	"editor.tabSize": 2
+}
