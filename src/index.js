@@ -1,5 +1,7 @@
 const pageSize = 100; // Must amount to a taller page than the viewport length.
-const capLimit = 110;
+const capLimit = 150;
+let firstItemId;
+let lastItemId;
 
 window.addEventListener('load', event => {
   // Kickstart the list.
@@ -14,10 +16,31 @@ window.addEventListener('scroll', () => {
   const newX = window.pageXOffset;
   const newY = window.pageYOffset;
 
-  if (oldX !== 0 && newX === 0) { console.log('Scrolled to the left.'); prependMoreItems(pageSize); }
-  if (oldX !== width && newX === width) { console.log('SCrolled to the right.'); appendMoreItems(pageSize); }
-  if (oldY !== 0 && newY === 0) { console.log('Scrolled to the top.'); prependMoreItems(pageSize); }
-  if (oldY !== height && newY === height) { console.log('Scrolled to the bottom.'); appendMoreItems(pageSize); }
+  if (oldX !== 0 && newX === 0) {
+    console.log('Hit left edge');
+    prependMoreItems(pageSize);
+   }
+
+  if (oldX !== width && newX === width) {
+    console.log('Hit right edge');
+    appendMoreItems(pageSize);
+  }
+
+  if (oldY !== 0 && newY === 0) {
+    console.log('Hit top edge');
+    const anchor = document.querySelector(`[data-id="${firstItemId}"]`);
+    const cursor = anchor.getBoundingClientRect().top;
+    prependMoreItems(pageSize);
+    document.documentElement.scrollTop += anchor.getBoundingClientRect().top - cursor;
+  }
+
+  if (oldY !== height && newY === height) {
+    console.log('Hit bottom edge');
+    const anchor = document.querySelector(`[data-id="${lastItemId}"]`);
+    const cursor = anchor.getBoundingClientRect().bottom;
+    appendMoreItems(pageSize);
+    document.documentElement.scrollTop -= cursor - anchor.getBoundingClientRect().bottom;
+  }
 
   oldX = newX;
   oldY = newY;
@@ -37,20 +60,15 @@ function* getItemsAfter(id, count) {
   }
 }
 
-let firstItemId;
-let lastItemId;
-
 function prependMoreItems(count) {
   const fragment = document.createDocumentFragment();
   const items = [...getItemsBefore(firstItemId || 0, count)];
-  console.log('top', firstItemId, items);
   for (const item of items) {
     const itemDiv = document.createElement('div');
+    itemDiv.dataset['id'] = item.id;
     itemDiv.appendChild(document.createTextNode(item.id));
     fragment.appendChild(itemDiv);
   }
-
-  firstItemId = items[0].id;
 
   // Remove items after that are over the cap limit.
   const excess = (document.body.childElementCount + items.length) - capLimit;
@@ -58,12 +76,12 @@ function prependMoreItems(count) {
     document.body.lastElementChild.remove();
   }
 
-  // TODO: Set firstItemId, lastItemId after excess removal here instead.
+  // Guaranteed to exist after first scroll.
+  document.body.insertBefore(fragment, document.body.firstElementChild);
+  firstItemId = Number(document.body.firstElementChild.dataset['id']);
+  lastItemId = Number(document.body.lastElementChild.dataset['id']);
 
-  const cursor = document.body.lastElementChild || document.documentElement;
-  document.body.insertBefore(fragment, document.body.firstElementChild /* Guaranteed to exist after first scroll. */);
-  cursor.scrollIntoView();
-  document.title = `${document.body.childElementCount} items loaded`;
+  console.log(`${document.body.childElementCount} items are displayed (${firstItemId}-${lastItemId}, ${excess} items was purged)`);
 }
 
 function appendMoreItems(count) {
@@ -71,12 +89,10 @@ function appendMoreItems(count) {
   const items = [...getItemsAfter(lastItemId || 0, count)];
   for (const item of items) {
     const itemDiv = document.createElement('div');
+    itemDiv.dataset['id'] = item.id;
     itemDiv.appendChild(document.createTextNode(item.id));
     fragment.appendChild(itemDiv);
   }
-
-  if (!firstItemId) { firstItemId = items[0].id; }
-  lastItemId = items[items.length - 1].id;
 
   // Remove items before that are over the cap limit.
   const excess = (document.body.childElementCount + items.length) - capLimit;
@@ -84,10 +100,9 @@ function appendMoreItems(count) {
     document.body.firstElementChild.remove();
   }
 
-  // TODO: Set firstItemId, lastItemId after excess removal here instead.
-
-  const cursor = document.body.lastElementChild || document.documentElement;
   document.body.appendChild(fragment);
-  cursor.scrollIntoView();
-  document.title = `${document.body.childElementCount} items loaded`;
+  firstItemId = Number(document.body.firstElementChild.dataset['id']);
+  lastItemId = Number(document.body.lastElementChild.dataset['id']);
+
+  console.log(`${document.body.childElementCount} items are displayed (${firstItemId}-${lastItemId}, ${excess} items was purged)`);
 }
