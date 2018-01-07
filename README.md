@@ -5,10 +5,10 @@ and trims the total amount of items so that a maximum number of items in the pag
 
 ## Running
 
-|         |                        |
-|---------|------------------------|
-| Windows | `start src/index.html` |
-| Unix    | `open src/index.html`  |
+| Platform | Command                |
+|----------|------------------------|
+| Windows  | `start src/index.html` |
+| Unix     | `open src/index.html`  |
 
 ## Licensing
 
