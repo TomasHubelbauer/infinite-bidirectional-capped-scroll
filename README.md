@@ -24,8 +24,5 @@ Please use VS Code to have `.vscode/settings.json` workspace settings picked up 
 - No ugly wrapping in the source (ew), only when viewer if need be (`html.format.wrapLineLength` set to `0`)
 - We use two spaces in this house (`editor.insertSpaces` set to `true` and `editor.tabSize` set to `2`)
 
-See [development plan](doc/tasks.md).
-
-## Studying
-
-See [development log](doc/notes.md).
+- See [development plan](doc/tasks.md).
+- See [development log](doc/notes.md).
