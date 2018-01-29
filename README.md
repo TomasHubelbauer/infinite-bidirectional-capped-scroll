@@ -5,6 +5,8 @@ and trims the total amount of items so that a maximum number of items in the pag
 
 ## Running
 
+[Demo on Bloggo](https://bloggo.herokuapp.com/infinite-bidirectional-capped-scroll/src/index.html)
+
 | Platform | Command                |
 |----------|------------------------|
 | Windows  | `start src/index.html` |
