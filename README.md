@@ -7,7 +7,6 @@ and trims the total amount of items so that a maximum number of items in the pag
 
 ## To-Do
 
-Achieve smooth scroll on the horizontal axis as well.
+### Achieve smooth scroll on the horizontal axis as well
 
-Fix behavior on Firefox, when scrolling to the end it starts oscilating around a
-value.
+### Fix behavior on Firefox, when scrolling to the end it starts oscilating
