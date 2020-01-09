@@ -10,3 +10,7 @@ and trims the total amount of items so that a maximum number of items in the pag
 ### Achieve smooth scroll on the horizontal axis as well
 
 ### Fix behavior on Firefox, when scrolling to the end it starts oscilating
+
+### Package up as an ESM library and add depending instructions to the readme
+
+Host using GitHub Pages to get a URL with the correct MIME.
